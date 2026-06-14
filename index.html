@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <title>YouTa Coffee Shop</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+      }
+
+      body {
+        background: #fffaf3;
+        color: #2c2420;
+        overflow-x: hidden;
+      }
+
+      /* ===== HEADER (STICKY) ===== */
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 30px;
+        background: #3b221d;
+        color: #fff;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        transition: all 0.2s;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 1.35rem;
+        font-weight: 700;
+        letter-spacing: -0.3px;
+      }
+
+      .logo img {
+        width: 42px;
+        height: auto;
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+      }
+
+      header nav {
+        display: flex;
+        gap: 28px;
+      }
+
+      header nav a {
+        color: #f9e2cf;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: 0.2s;
+        padding: 6px 0;
+        border-bottom: 2px solid transparent;
+      }
+
+      header nav a:hover {
+        color: #ffcf9a;
+        border-bottom-color: #c7a17a;
+      }
+
+      .menu-btn {
+        font-size: 28px;
+        cursor: pointer;
+        display: none;
+        background: none;
+        border: none;
+        color: white;
+        transition: 0.2s;
+      }
+
+      /* ===== SIDEBAR (MOBILE & TABLET) ===== */
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: -300px;
+        width: 280px;
+        height: 100%;
+        background: #2f1e1a;
+        backdrop-filter: blur(2px);
+        padding: 30px 20px;
+        transition: 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        z-index: 2000;
+        box-shadow: 6px 0 24px rgba(0, 0, 0, 0.3);
+        overflow-y: auto;
+      }
+
+      .sidebar.active {
+        left: 0;
+      }
+
+      .sidebar-logo {
+        text-align: center;
+        margin-bottom: 35px;
+        border-bottom: 1px solid #b8876b;
+        padding-bottom: 20px;
+      }
+
+      .sidebar-logo img {
+        width: 85px;
+        margin-bottom: 10px;
+        border-radius: 50%;
+        background: #f7ede3;
+        padding: 8px;
+      }
+
+      .sidebar h2 {
+        color: #ffe1c6;
+        font-size: 1.5rem;
+        letter-spacing: 1px;
+      }
+
+      .sidebar a {
+        display: block;
+        color: #f6e2d4;
+        text-decoration: none;
+        margin: 20px 0;
+        font-size: 1.2rem;
+        font-weight: 500;
+        padding: 10px 12px;
+        border-radius: 40px;
+        transition: 0.2s;
+      }
+
+      .sidebar a:hover {
+        background: #c7a17a;
+        color: #2b1d18;
+        padding-left: 20px;
+      }
+
+      .close-btn {
+        color: #ffdbb5;
+        font-size: 28px;
+        cursor: pointer;
+        margin-bottom: 25px;
+        display: inline-block;
+        background: #3b221d;
+        padding: 8px 14px;
+        border-radius: 40px;
+        transition: 0.2s;
+      }
+
+      /* ===== HERO SECTION (FULLY RESPONSIVE) ===== */
+      .hero {
+        min-height: 85vh;
+        background: linear-gradient(120deg, rgba(30, 20, 16, 0.7), rgba(15, 10, 8, 0.65)),
+          url("images/Hero.png") center center / cover no-repeat;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        text-align: center;
+        padding: 2rem 1.5rem;
+        background-attachment: fixed;
+        background-size: cover;
+      }
+
+      .hero h1 {
+        font-size: clamp(2.2rem, 8vw, 4.8rem);
+        font-weight: 800;
+        text-shadow: 2px 4px 12px rgba(0,0,0,0.4);
+        max-width: 900px;
+      }
+
+      .hero p {
+        font-size: clamp(1rem, 4vw, 1.4rem);
+        margin-top: 0.8rem;
+        opacity: 0.9;
+      }
+
+      .hero button {
+        margin-top: 32px;
+        padding: 12px 32px;
+        border: none;
+        background: #c7a17a;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        border-radius: 50px;
+        color: #281a14;
+        transition: all 0.25s ease;
+        box-shadow: 0 8px 18px rgba(0,0,0,0.2);
+      }
+
+      .hero button:hover {
+        background: #e0b386;
+        transform: scale(1.03);
+        letter-spacing: 0.5px;
+      }
+
+      /* ===== MENU SECTION ===== */
+      .menu {
+        padding: 70px 30px;
+        text-align: center;
+        background: #fffbf7;
+      }
+
+      .menu h2 {
+        font-size: clamp(2rem, 6vw, 3rem);
+        color: #3b221d;
+        font-weight: 700;
+        position: relative;
+        display: inline-block;
+        padding-bottom: 12px;
+      }
+      .menu h2:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 20%;
+        width: 60%;
+        height: 3px;
+        background: #c7a17a;
+        border-radius: 4px;
+      }
+
+      /* RESPONSIVE GRID - fully flexible */
+      .menu-items {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 2rem;
+        margin-top: 55px;
+        max-width: 1400px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      /* ===== CARD DESIGN ===== */
+      .card {
+        background: white;
+        border-radius: 28px;
+        padding: 20px 18px 22px;
+        box-shadow: 0 20px 32px -12px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        opacity: 0;
+        transform: translateY(36px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        backdrop-filter: blur(0px);
+        border: 1px solid rgba(199, 161, 122, 0.2);
+      }
+
+      .card.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .card:hover {
+        transform: translateY(-8px) scale(1.01);
+        box-shadow: 0 28px 40px -12px rgba(70, 40, 20, 0.25);
+        border-color: #c7a17a80;
+      }
+
+      .card img {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        border-radius: 24px;
+        transition: transform 0.35s ease;
+        box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+      }
+
+      .card:hover img {
+        transform: scale(1.03);
+      }
+
+      .card h3 {
+        margin: 18px 0 6px;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #2c1a13;
+      }
+
+      .card p {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #a5724b;
+        background: #faf0e6;
+        display: inline-block;
+        padding: 4px 16px;
+        border-radius: 40px;
+        margin-top: 4px;
+      }
+
+      .card button {
+        margin-top: 16px;
+        padding: 10px 22px;
+        background: linear-gradient(105deg, #4b2e2b, #6b3f36);
+        color: white;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        border-radius: 50px;
+        transition: all 0.2s;
+        width: 80%;
+        font-size: 0.9rem;
+        letter-spacing: 0.5px;
+      }
+
+      .card button:hover {
+        background: #8b5a4b;
+        transform: scale(0.98);
+        box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+      }
+
+      /* ===== ABOUT SECTION (FLEXIBLE & RESPONSIVE) ===== */
+      .about {
+        display: flex;
+        gap: 3rem;
+        padding: 70px 30px;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        background: #f9efe7;
+      }
+
+      .about img {
+        width: 100%;
+        max-width: 280px;
+        border-radius: 32px;
+        box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+        transition: transform 0.3s;
+      }
+
+      .about img:hover {
+        transform: scale(1.02);
+      }
+
+      .about div {
+        flex: 1;
+        min-width: 240px;
+        text-align: center;
+      }
+
+      .about h2 {
+        font-size: clamp(1.8rem, 5vw, 2.6rem);
+        color: #3b221d;
+        margin-bottom: 20px;
+      }
+
+      .about p {
+        font-size: 1.1rem;
+        line-height: 1.5;
+        max-width: 500px;
+        margin: 0 auto;
+        color: #38261f;
+      }
+
+      /* ===== CONTACT ===== */
+      .contact {
+        padding: 60px 30px;
+        background: #fff0e6;
+        text-align: center;
+      }
+
+      .contact h2 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+        color: #3b221d;
+      }
+
+      .contact p {
+        font-size: 1.1rem;
+        margin: 12px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .contact i {
+        color: #a5724b;
+        width: 28px;
+      }
+
+      footer {
+        background: #3b221d;
+        color: #f0dbca;
+        text-align: center;
+        padding: 1.2rem;
+        font-size: 0.9rem;
+        letter-spacing: 0.3px;
+      }
+
+      /* ===== RESPONSIVE BREAKPOINTS (ENHANCED) ===== */
+      @media (max-width: 880px) {
+        .menu-items {
+          gap: 1.5rem;
+        }
+        .about {
+          gap: 2rem;
+        }
+      }
+
+      @media (max-width: 768px) {
+        header nav {
+          display: none;
+        }
+        .menu-btn {
+          display: block;
+        }
+        header {
+          padding: 12px 20px;
+        }
+        .hero {
+          min-height: 70vh;
+          background-attachment: scroll;
+        }
+        .menu {
+          padding: 50px 20px;
+        }
+        .card button {
+          width: 90%;
+        }
+      }
+
+      @media (max-width: 560px) {
+        .menu-items {
+          grid-template-columns: 1fr;
+          max-width: 380px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+        .about {
+          padding: 50px 20px;
+        }
+        .about img {
+          max-width: 220px;
+        }
+        .contact {
+          padding: 40px 20px;
+        }
+        .hero button {
+          padding: 10px 28px;
+        }
+        .logo span {
+          font-size: 1.1rem;
+        }
+        .logo img {
+          width: 36px;
+        }
+      }
+
+      /* small devices fine tuning */
+      @media (max-width: 380px) {
+        .hero h1 {
+          font-size: 2rem;
+        }
+        .card h3 {
+          font-size: 1.1rem;
+        }
+      }
+
+      /* scroll behavior */
+      html {
+        scroll-behavior: smooth;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- SIDEBAR (mobile optimized) -->
+    <div class="sidebar" id="sidebar">
+      <div class="close-btn" onclick="toggleSidebar()">
+        <i class="fas fa-times"></i> Close
+      </div>
+      <div class="sidebar-logo">
+        <img src="images/logo.png" alt="Khmer Coffee Logo" />
+        <h2>YouTa Coffee</h2>
+      </div>
+      <a href="#home" onclick="toggleSidebar()"><i class="fas fa-home"></i> Home</a>
+      <a href="#menu" onclick="toggleSidebar()"><i class="fas fa-mug-hot"></i> Menu</a>
+      <a href="#about" onclick="toggleSidebar()"><i class="fas fa-leaf"></i> About</a>
+      <a href="#contact" onclick="toggleSidebar()"><i class="fas fa-phone-alt"></i> Contact</a>
+    </div>
+
+    <!-- HEADER -->
+    <header>
+      <div class="logo">
+        <img src="images/logo.png" alt="logo" />
+        <span>YouTa Coffee</span>
+      </div>
+
+      <nav>
+        <a href="#home">Home</a>
+        <a href="#menu">Menu</a>
+        <a href="#about">Our Story</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <button class="menu-btn" onclick="toggleSidebar()" aria-label="Menu">
+        <i class="fas fa-bars"></i>
+      </button>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section id="home" class="hero">
+      <h1>Authentic Khmer Coffee</h1>
+      <p>Freshly roasted • Local beans • Cambodia soul</p>
+      <button onclick="scrollToMenu()">Explore Menu <i class="fas fa-arrow-down"></i></button>
+    </section>
+
+    <!-- MENU SECTION (ALL 20 ITEMS) -->
+    <section id="menu" class="menu">
+      <h2>☕ Our Signature Selections</h2>
+      <div class="menu-items">
+        <!-- item 1 -->
+        <div class="card">
+          <img src="images/IceCafe.png" alt="Khmer Iced Coffee" />
+          <h3>Khmer Iced Coffee</h3>
+          <p>$2.00</p>
+          <button>Add to Cart</button>
+        </div>
+        <div class="card">
+          <img src="images/milkcafe.png" alt="Iced Coffee with Milk" />
+          <h3>Iced Coffee with Milk</h3>
+          <p>$2.25</p>
+          <button>Add to Cart</button>
+        </div>
+        <div class="card">
+          <img src="images/latte.png" alt="Latte" />
+          <h3>Latte</h3>
+          <p>$2.50</p>
+          <button>Add to Cart</button>
+        </div>
+        <div class="card">
+          <img src="images/Cappuccino.png" alt="Cappuccino" />
+          <h3>Cappuccino</h3>
+          <p>$3.00</p>
+          <button>Add to Cart</button>
+        </div>
+        <div class="card">
+          <img src="images/americano.png" alt="Americano" />
+          <h3>Americano</h3>
+          <p>$2.00</p>
+          <button>Add to Cart</button>
+        </div>
+        <div class="card">
+          <img src="images/espresso.png" alt="Espresso" />
+          <h3>Espresso</h3>
+          <p>$1.75</p>
+          <button>Add to Cart</button>
+        </div>
+        <div class="card">
+          <img src="images/mocha.png" alt="Mocha" />
+          <h3>Mocha</h3>
+          <p>$3.10</p>
+          <button>Add to Cart</button>
+        </div>
+        <div class="card">
+          <img src="images/caramellatte.png" alt="Caramel Latte" />
+          <h3>Caramel Latte</h3>
+          <p>$3.10</p>
+          <button>Add to Cart</button>
+        </div>
+        <div class="card">
+          <img src="images/vanillalatte.png" alt="Vanilla Latte" />
+          <h3>Vanilla Latte</h3>
+          <p>$3.10</p>
+          <button>Add to Cart</button>
+        </div>
+        <div class="card">
+          <img src="images/coconutcoffee.png" alt="Coconut Coffee" />
+          <h3>Coconut Coffee</h3>
+          <p>$2.80</p>
+          <button>Add to Cart</button>
+        </div>
+        <div class="card">
+          <img src="images/palmcoffee.png" alt="Palm Sugar Coffee" />
+          <h3>Palm Sugar Coffee</h3>
+          <p>$1.90</p>
+          <button>Add to Cart</button>
+        </div>
+        <div class="card">
+          <img src="images/saltycoffee.png" alt="Salty Coffee" />
+          <h3>Salty Coffee</h3>
+          <p>$2.20</p>
+          <button>Add to Cart</button>
+        </div>
+        <div class="card">
+          <img src="images/blackcoffee.png" alt="Hot Black Coffee" />
+          <h3>Hot Black Coffee</h3>
+          <p>$1.80</p>
+          <button>Add to Cart</button>
+        </div>
+        <div class="card">
+          <img src="images/icedamericano.png" alt="Iced Americano" />
+          <h3>Iced Americano</h3>
+          <p>$2.10</p>
+          <button>Add to Cart</button>
+        </div>
+        <div class="card">
+          <img src="images/macchiato.png" alt="Caramel Macchiato" />
+          <h3>Caramel Macchiato</h3>
+          <p>$3.40</p>
+          <button>Add to Cart</button>
+        </div>
+        <div class="card">
+          <img src="images/khmerstrong.png" alt="Khmer Strong Coffee" />
+          <h3>Khmer Strong Coffee</h3>
+          <p>$1.50</p>
+          <button>Add to Cart</button>
+        </div>
+        <div class="card">
+          <img src="images/icedlatte.png" alt="Iced Latte" />
+          <h3>Iced Latte</h3>
+          <p>$2.60</p>
+          <button>Add to Cart</button>
+        </div>
+        <div class="card">
+          <img src="images/icedmocha.png" alt="Iced Mocha" />
+          <h3>Iced Mocha</h3>
+          <p>$3.20</p>
+          <button>Add to Cart</button>
+        </div>
+        <div class="card">
+          <img src="images/hotlatte.png" alt="Hot Latte" />
+          <h3>Hot Latte</h3>
+          <p>$2.40</p>
+          <button>Add to Cart</button>
+        </div>
+        <div class="card">
+          <img src="images/doubleespresso.png" alt="Double Espresso" />
+          <h3>Double Espresso</h3>
+          <p>$2.30</p>
+          <button>Add to Cart</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT SECTION enhanced -->
+    <section id="about" class="about">
+      <img src="images/about.png" alt="Traditional Khmer coffee brewing" />
+      <div>
+        <h2>🇰🇭 Our Khmer Heritage</h2>
+        <p>
+          Rooted in Cambodia’s highlands, we source premium robusta & arabica from local farmers.
+          Every cup celebrates tradition — from slow-drip filters to modern artistry. 
+          Enjoy authentic flavors, sustainable practices, and the warmth of Phnom Penh hospitality.
+        </p>
+      </div>
+      <img src="images/abt.png" alt="Cambodia coffee farm" />
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section id="contact" class="contact">
+      <h2><i class="fas fa-heart"></i> Get in Touch</h2>
+      <p><i class="fas fa-map-marker-alt"></i> Street 240, Daun Penh, Phnom Penh, Cambodia</p>
+      <p><i class="fas fa-phone-alt"></i> +855 12 345 678</p>
+      <p><i class="fas fa-envelope"></i> Youta@khmercoffee.com</p>
+      <p><i class="fas fa-clock"></i> Mon-Sun: 7:00 AM – 9:00 PM</p>
+    </section>
+
+    <footer>© 2026 Khmer Coffee Shop — Authentic Cambodian Soul ☕</footer>
+
+    <script>
+      // Toggle sidebar (mobile)
+      function toggleSidebar() {
+        const sidebar = document.getElementById("sidebar");
+        sidebar.classList.toggle("active");
+        // optional: prevent body scroll when sidebar open on mobile
+        if (sidebar.classList.contains("active")) {
+          document.body.style.overflow = "hidden";
+        } else {
+          document.body.style.overflow = "";
+        }
+      }
+
+      // Close sidebar when clicking outside on window resize? optional, but not necessary. but we improve UX: add event for link close already.
+
+      function scrollToMenu() {
+        const menuSection = document.getElementById("menu");
+        menuSection.scrollIntoView({ behavior: "smooth" });
+      }
+
+      // Intersection Observer for revealing cards with better threshold (responsive ready)
+      const cardObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("show");
+              // optional: keep observing but after showing we can unobserve for performance
+              cardObserver.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.15, rootMargin: "0px 0px -20px 0px" }
+      );
+
+      document.querySelectorAll(".card").forEach((card) => {
+        cardObserver.observe(card);
+      });
+
+      // pre-check any visible cards on load already? manual check
+      window.addEventListener("load", () => {
+        // manually trigger check
+        const cards = document.querySelectorAll(".card");
+        cards.forEach((card) => {
+          const rect = card.getBoundingClientRect();
+          if (rect.top < window.innerHeight - 100) {
+            card.classList.add("show");
+          }
+        });
+      });
+
+      // Add to Cart button alert with responsive & interactive feedback
+      const cartButtons = document.querySelectorAll(".card button");
+      cartButtons.forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const cardTitle = btn.closest(".card")?.querySelector("h3")?.innerText || "Coffee";
+          alert(`✨ Added ${cardTitle} to your cart! ☕ Enjoy Khmer flavors.`);
+        });
+      });
+
+      // Close sidebar when clicking on a link (already exists via onclick, but ensure body overflow reset)
+      const sidebarLinks = document.querySelectorAll(".sidebar a");
+      sidebarLinks.forEach(link => {
+        link.addEventListener("click", () => {
+          if (document.getElementById("sidebar").classList.contains("active")) {
+            document.body.style.overflow = "";
+          }
+        });
+      });
+
+      // extra touch: if someone clicks on overlay (optional but not needed), we add background click close for sidebar? improve usability:
+      document.addEventListener("click", function(event) {
+        const sidebar = document.getElementById("sidebar");
+        const menuBtn = document.querySelector(".menu-btn");
+        if (sidebar.classList.contains("active") && !sidebar.contains(event.target) && !menuBtn.contains(event.target)) {
+          toggleSidebar();
+          document.body.style.overflow = "";
+        }
+      });
+
+      // Update responsive text & fix hero image path if missing but we keep consistent
+      // minor fix to ensure hero BG works even if image missing? but we keep as is.
+      // Also added viewport scaling.
+    </script>
+  </body>
+</html>
